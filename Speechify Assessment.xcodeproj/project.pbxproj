@@ -10,12 +10,12 @@
 		BB8DE4B326F9262A0016F864 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8DE4B226F9262A0016F864 /* AppDelegate.swift */; };
 		BB8DE4B526F9262A0016F864 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8DE4B426F9262A0016F864 /* SceneDelegate.swift */; };
 		BB8DE4B726F9262A0016F864 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8DE4B626F9262A0016F864 /* ViewController.swift */; };
-		BB8DE4BA26F9262A0016F864 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB8DE4B826F9262A0016F864 /* Main.storyboard */; };
 		BB8DE4BC26F9262F0016F864 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BB8DE4BB26F9262F0016F864 /* Assets.xcassets */; };
 		BB8DE4BF26F9262F0016F864 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB8DE4BD26F9262F0016F864 /* LaunchScreen.storyboard */; };
 		BB8DE4CA26F926300016F864 /* Speechify_AssessmentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8DE4C926F926300016F864 /* Speechify_AssessmentTests.swift */; };
 		BB8DE4D526F926300016F864 /* Speechify_AssessmentUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8DE4D426F926300016F864 /* Speechify_AssessmentUITests.swift */; };
 		BB8DE4E426F927DE0016F864 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = BB8DE4E326F927DE0016F864 /* RxSwift */; };
+		BB8DE4E626F92A060016F864 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8DE4E526F92A060016F864 /* UIColorExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,7 +40,6 @@
 		BB8DE4B226F9262A0016F864 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BB8DE4B426F9262A0016F864 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		BB8DE4B626F9262A0016F864 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		BB8DE4B926F9262A0016F864 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		BB8DE4BB26F9262F0016F864 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BB8DE4BE26F9262F0016F864 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		BB8DE4C026F9262F0016F864 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -50,6 +49,7 @@
 		BB8DE4D026F926300016F864 /* Speechify AssessmentUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Speechify AssessmentUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB8DE4D426F926300016F864 /* Speechify_AssessmentUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Speechify_AssessmentUITests.swift; sourceTree = "<group>"; };
 		BB8DE4D626F926300016F864 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BB8DE4E526F92A060016F864 /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,7 +104,7 @@
 				BB8DE4B226F9262A0016F864 /* AppDelegate.swift */,
 				BB8DE4B426F9262A0016F864 /* SceneDelegate.swift */,
 				BB8DE4B626F9262A0016F864 /* ViewController.swift */,
-				BB8DE4B826F9262A0016F864 /* Main.storyboard */,
+				BB8DE4E526F92A060016F864 /* UIColorExtension.swift */,
 				BB8DE4BB26F9262F0016F864 /* Assets.xcassets */,
 				BB8DE4BD26F9262F0016F864 /* LaunchScreen.storyboard */,
 				BB8DE4C026F9262F0016F864 /* Info.plist */,
@@ -241,7 +241,6 @@
 			files = (
 				BB8DE4BF26F9262F0016F864 /* LaunchScreen.storyboard in Resources */,
 				BB8DE4BC26F9262F0016F864 /* Assets.xcassets in Resources */,
-				BB8DE4BA26F9262A0016F864 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -269,6 +268,7 @@
 				BB8DE4B726F9262A0016F864 /* ViewController.swift in Sources */,
 				BB8DE4B326F9262A0016F864 /* AppDelegate.swift in Sources */,
 				BB8DE4B526F9262A0016F864 /* SceneDelegate.swift in Sources */,
+				BB8DE4E626F92A060016F864 /* UIColorExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -304,14 +304,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		BB8DE4B826F9262A0016F864 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				BB8DE4B926F9262A0016F864 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		BB8DE4BD26F9262F0016F864 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -447,6 +439,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = XYY68H4963;
 				INFOPLIST_FILE = "Speechify Assessment/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -466,6 +459,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = XYY68H4963;
 				INFOPLIST_FILE = "Speechify Assessment/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
