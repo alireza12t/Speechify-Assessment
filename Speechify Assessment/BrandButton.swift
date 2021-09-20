@@ -22,7 +22,8 @@ public class BrandButton: UIButton {
     public func setupUI() {
         layer.cornerRadius = self.cornerRadius
         translatesAutoresizingMaskIntoConstraints = false
-        titleLabel?.font = .systemFont(ofSize: 18, weight: .bold)
+        titleLabel?.font = .systemFont(ofSize: 15, weight: .medium)
+        setTitleColor(.white, for: .normal)
     }
     
     public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -55,7 +56,7 @@ public class BrandButton: UIButton {
         }
     }
     
-    @IBInspectable public var cornerRadius: CGFloat = 0 {
+    @IBInspectable public var cornerRadius: CGFloat = 30 {
         didSet {
             self.layer.cornerRadius = cornerRadius
         }
