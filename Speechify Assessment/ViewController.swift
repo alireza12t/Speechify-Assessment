@@ -143,7 +143,7 @@ extension ViewController {
             if let result = result {
                 // Update the text view with the results.
                 self.textView.text = result.bestTranscription.formattedString
-                textView.textColor = BrandColor.textColor.color
+                self.textView.textColor = BrandColor.textColor.color
                 isFinal = result.isFinal
                 print("Text => \(result.bestTranscription.formattedString)")
             }
