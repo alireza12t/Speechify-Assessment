@@ -13,14 +13,17 @@ class ViewController: UIViewController {
     fileprivate lazy var recordButton: BrandButton = {
         let button = BrandButton()
         button.originalBackgroundColor = BrandColor.primaryColor.color
-        button.setTitle("Record", for: .normal)
+        button.setTitle("Record", for: [])
+        button.accessibilityLabel = "Record"
+        button.accessibilityHint = "this button can start or stop recording"
         return button
     }()
     
     fileprivate lazy var playButton: BrandButton = {
         let button = BrandButton()
         button.originalBackgroundColor = BrandColor.lightPrimaryColor.color
-        button.setTitle("Play", for: .normal)
+        button.setTitle("Play", for: [])
+        button.accessibilityLabel = "Play"
         return button
     }()
     
@@ -57,6 +60,8 @@ class ViewController: UIViewController {
         textView.backgroundColor = .clear
         textView.isEditable = false
         textView.isScrollEnabled = true
+        textView.accessibilityLabel = "speech"
+        textView.accessibilityHint = "this textview shows text that made with your speech"
         return textView
     }()
     
@@ -142,6 +147,19 @@ extension ViewController {
         recognitionTask = speechRecognizer.recognitionTask(with: recognitionRequest) { result, error in
             var isFinal = false
             
+            //            if AVAudioSession.sharedInstance().isOtherAudioPlaying {
+            //                AlertManager.showAlert(withTitle: "Recoording interupted!", withMessage: "Your phone is playing sth!!", withOkButtonTitle: "OK", on: self)
+            //                // Stop recognizing speech if there is a problem.
+            //                self.audioEngine.stop()
+            //                inputNode.removeTap(onBus: 0)
+            //
+            //                self.recognitionRequest = nil
+            //                self.recognitionTask = nil
+            //
+            //                self.recordButton.setTitle("Start Recording", for: [])
+            //            }
+            
+            
             if let result = result {
                 // Update the text view with the results.
                 let newTranscriptionText = result.bestTranscription.formattedString
@@ -157,7 +175,6 @@ extension ViewController {
                     self.textView.text = ""
                     self.textView.text = newTranscriptionText
                 }
-                self.textView.textColor = BrandColor.textColor.color
                 isFinal = result.isFinal
                 print("New Text => ")
             }
@@ -170,7 +187,6 @@ extension ViewController {
                 self.recognitionRequest = nil
                 self.recognitionTask = nil
                 
-                self.recordButton.isEnabled = true
                 self.recordButton.setTitle("Start Recording", for: [])
             }
         }
@@ -186,7 +202,6 @@ extension ViewController {
         
         // Let the user know to start talking.
         textView.text = "I'm listening"
-        textView.textColor = .systemGray
     }
     
     func stopRecording() {
@@ -293,3 +308,7 @@ extension ViewController {
         recordButton.titleLabel?.font = .systemFont(ofSize: 15, weight: .medium)
     }
 }
+
+//extension ViewController: AVAudioPlayerDelegate {
+//    audioppla
+//}

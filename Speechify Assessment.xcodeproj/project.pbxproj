@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -14,7 +14,6 @@
 		BB8DE4BF26F9262F0016F864 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB8DE4BD26F9262F0016F864 /* LaunchScreen.storyboard */; };
 		BB8DE4CA26F926300016F864 /* Speechify_AssessmentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8DE4C926F926300016F864 /* Speechify_AssessmentTests.swift */; };
 		BB8DE4D526F926300016F864 /* Speechify_AssessmentUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8DE4D426F926300016F864 /* Speechify_AssessmentUITests.swift */; };
-		BB8DE4E426F927DE0016F864 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = BB8DE4E326F927DE0016F864 /* RxSwift */; };
 		BB8DE4E626F92A060016F864 /* BrandColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8DE4E526F92A060016F864 /* BrandColor.swift */; };
 		BB8DE4E926F92CE10016F864 /* BrandButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8DE4E826F92CE10016F864 /* BrandButton.swift */; };
 		BB8DE4EB26F92DB90016F864 /* VibrateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8DE4EA26F92DB90016F864 /* VibrateHelper.swift */; };
@@ -65,7 +64,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BB8DE4E426F927DE0016F864 /* RxSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -207,7 +205,6 @@
 			);
 			name = "Speechify Assessment";
 			packageProductDependencies = (
-				BB8DE4E326F927DE0016F864 /* RxSwift */,
 			);
 			productName = "Speechify Assessment";
 			productReference = BB8DE4AF26F9262A0016F864 /* Speechify Assessment.app */;
@@ -281,7 +278,6 @@
 			);
 			mainGroup = BB8DE4A626F9262A0016F864;
 			packageReferences = (
-				BB8DE4E226F927DE0016F864 /* XCRemoteSwiftPackageReference "RxSwift" */,
 			);
 			productRefGroup = BB8DE4B026F9262A0016F864 /* Products */;
 			projectDirPath = "";
@@ -659,25 +655,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		BB8DE4E226F927DE0016F864 /* XCRemoteSwiftPackageReference "RxSwift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/ReactiveX/RxSwift";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 6.2.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		BB8DE4E326F927DE0016F864 /* RxSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = BB8DE4E226F927DE0016F864 /* XCRemoteSwiftPackageReference "RxSwift" */;
-			productName = RxSwift;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = BB8DE4A726F9262A0016F864 /* Project object */;
 }
