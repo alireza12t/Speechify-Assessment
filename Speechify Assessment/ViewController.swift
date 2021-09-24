@@ -144,10 +144,22 @@ extension ViewController {
             
             if let result = result {
                 // Update the text view with the results.
-                self.textView.text = result.bestTranscription.formattedString
+                let newTranscriptionText = result.bestTranscription.formattedString
+                var oldTranscriptionText = self.textView.text ?? ""
+                if oldTranscriptionText == "I'm listening" {
+                    oldTranscriptionText = ""
+                }
+                
+                let newWordsList = newTranscriptionText.split(separator: " ").compactMap({String($0)})
+                if let difference = newWordsList.last, newTranscriptionText != oldTranscriptionText {
+                    self.textView.attributedText = oldTranscriptionText.generateAttributedString(highlightedText: difference)
+                } else {
+                    self.textView.text = ""
+                    self.textView.text = newTranscriptionText
+                }
                 self.textView.textColor = BrandColor.textColor.color
                 isFinal = result.isFinal
-                print("Text => \(result.bestTranscription.formattedString)")
+                print("New Text => ")
             }
             
             if error != nil || isFinal {

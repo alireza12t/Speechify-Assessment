@@ -8,7 +8,7 @@
 import UIKit
 
 enum BrandColor: String {
-    case backgroundColor, lightPrimaryColor, primaryColor, textColor
+    case backgroundColor, lightPrimaryColor, primaryColor, textColor, highlightColor
     
     var color: UIColor {
         return UIColor(named: self.rawValue)!
