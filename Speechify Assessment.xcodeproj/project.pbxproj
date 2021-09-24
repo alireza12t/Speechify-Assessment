@@ -17,6 +17,7 @@
 		BB8DE4E626F92A060016F864 /* BrandColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8DE4E526F92A060016F864 /* BrandColor.swift */; };
 		BB8DE4E926F92CE10016F864 /* BrandButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8DE4E826F92CE10016F864 /* BrandButton.swift */; };
 		BB8DE4EB26F92DB90016F864 /* VibrateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8DE4EA26F92DB90016F864 /* VibrateHelper.swift */; };
+		BBBEF65726FE4A0B002C0820 /* SpeakManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBBEF65626FE4A0B002C0820 /* SpeakManager.swift */; };
 		BBEA2F8F26FDD5100018ADD3 /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBEA2F8E26FDD5100018ADD3 /* AlertManager.swift */; };
 		BBEA2F9126FDFC370018ADD3 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBEA2F9026FDFC370018ADD3 /* StringExtension.swift */; };
 /* End PBXBuildFile section */
@@ -55,6 +56,7 @@
 		BB8DE4E526F92A060016F864 /* BrandColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandColor.swift; sourceTree = "<group>"; };
 		BB8DE4E826F92CE10016F864 /* BrandButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandButton.swift; sourceTree = "<group>"; };
 		BB8DE4EA26F92DB90016F864 /* VibrateHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VibrateHelper.swift; sourceTree = "<group>"; };
+		BBBEF65626FE4A0B002C0820 /* SpeakManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeakManager.swift; sourceTree = "<group>"; };
 		BBEA2F8E26FDD5100018ADD3 /* AlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
 		BBEA2F9026FDFC370018ADD3 /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -109,7 +111,6 @@
 			children = (
 				BB8DE4B226F9262A0016F864 /* AppDelegate.swift */,
 				BB8DE4B426F9262A0016F864 /* SceneDelegate.swift */,
-				BBEA2F8B26FDCE7E0018ADD3 /* Model */,
 				BB8DE4ED26F92DD50016F864 /* Tools */,
 				BB8DE4EC26F92DC90016F864 /* View Controllers */,
 				BB8DE4E726F92CD50016F864 /* Views */,
@@ -169,6 +170,7 @@
 				BB8DE4E526F92A060016F864 /* BrandColor.swift */,
 				BBEA2F8E26FDD5100018ADD3 /* AlertManager.swift */,
 				BB8DE4EA26F92DB90016F864 /* VibrateHelper.swift */,
+				BBBEF65626FE4A0B002C0820 /* SpeakManager.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -179,13 +181,6 @@
 				BBEA2F9026FDFC370018ADD3 /* StringExtension.swift */,
 			);
 			path = Extensions;
-			sourceTree = "<group>";
-		};
-		BBEA2F8B26FDCE7E0018ADD3 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -324,6 +319,7 @@
 				BBEA2F8F26FDD5100018ADD3 /* AlertManager.swift in Sources */,
 				BB8DE4E926F92CE10016F864 /* BrandButton.swift in Sources */,
 				BB8DE4B726F9262A0016F864 /* ViewController.swift in Sources */,
+				BBBEF65726FE4A0B002C0820 /* SpeakManager.swift in Sources */,
 				BB8DE4EB26F92DB90016F864 /* VibrateHelper.swift in Sources */,
 				BBEA2F9126FDFC370018ADD3 /* StringExtension.swift in Sources */,
 				BB8DE4B326F9262A0016F864 /* AppDelegate.swift in Sources */,

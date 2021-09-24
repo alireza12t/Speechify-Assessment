@@ -75,6 +75,7 @@ class ViewController: UIViewController {
     private var recognitionTask: SFSpeechRecognitionTask?
     private let audioEngine = AVAudioEngine()
     var audioPlayer: AVAudioPlayer?
+    let audioSession = AVAudioSession.sharedInstance()
     
     override func loadView() {
         view = UIView()
@@ -130,7 +131,6 @@ extension ViewController {
         self.recognitionTask = nil
         
         // Configure the audio session for the app.
-        let audioSession = AVAudioSession.sharedInstance()
         try audioSession.setCategory(.playAndRecord, mode: .default, options: .duckOthers)
         try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
         let inputNode = audioEngine.inputNode
@@ -252,6 +252,13 @@ extension ViewController {
 //                AlertManager.showAlert(withTitle: "Error in playing!", withMessage: "Can't play the audio file failed with an error \(error.localizedDescription)", withOkButtonTitle: "OK", on: self)
 //            }
 //        }
+        //MARK: I need to fix recoriding sound and play it here but it has a bug and I couldn't find the problem and submmited my question in stackoverflow => https://stackoverflow.com/questions/69318638/record-voice-while-converting-speech-to-text-using-sfspeechrecognitiontask
+        if let text = textView.text, !text.isEmpty {
+            SpeakManager.shared.say(text)
+        } else {
+            SpeakManager.shared.say("You didn't say anything!")
+            AlertManager.showAlert(withTitle: "Error in playing!", withMessage: "You didn't say anything!", withOkButtonTitle: "OK", on: self)
+        }
     }
     
     @objc func recordButtonDidTap(_ sender: UIButton) {
