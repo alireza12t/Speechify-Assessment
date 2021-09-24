@@ -11,6 +11,4 @@ Convert live Speech to Text in app with Swift
 
 - ## Description
 
-  Implementation of Converting Live Speech to Text in iOS App. To clarify why I didn't use Google API, in order to access this API I hadd to enable free trial of my Google Cloud Accoount and this was taking longer than I expected because of my country regulations and banking system.
-
-  I’ve included my README in the Playground.
+  Implementation of Converting Live Speech to Text in iOS App. To clarify why I didn't use Google API, in order to access this API I hadd to enable free trial of Google Cloud Account and this was taking longer than I expected because of my country banking regulations.
