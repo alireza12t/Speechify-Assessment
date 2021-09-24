@@ -61,8 +61,12 @@ class ViewController: UIViewController {
     var safeArea = UILayoutGuide()
     var topSpace: CGFloat = 60
     var bottomSpace: CGFloat = 35
-    var speechToTextManager: SpeechToTextHelper!
-
+    
+    private let speechRecognizer = SFSpeechRecognizer(locale: Locale(identifier: "en-US"))!
+    private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
+    private var recognitionTask: SFSpeechRecognitionTask?
+    private let audioEngine = AVAudioEngine()
+    
     override func loadView() {
         view = UIView()
         view.backgroundColor = .backgroundColor
@@ -70,7 +74,7 @@ class ViewController: UIViewController {
         setupFonts()
         addViews()
         addActions()
-        speechToTextManager = SpeechToTextHelper(delegate: self)
+        speechRecognizer.delegate = self
     }
     
     override public func viewDidAppear(_ animated: Bool) {
@@ -104,10 +108,81 @@ extension ViewController: SFSpeechRecognizerDelegate {
     }
 }
 
+//MARK: - Speech Convertor & Record
+extension ViewController {
+    private func startRecording() throws {
+        // Cancel the previous task if it's running.
+        recognitionTask?.cancel()
+        self.recognitionTask = nil
+        
+        // Configure the audio session for the app.
+        let audioSession = AVAudioSession.sharedInstance()
+        try audioSession.setCategory(.record, mode: .measurement, options: .duckOthers)
+        try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
+        let inputNode = audioEngine.inputNode
+        
+        // Create and configure the speech recognition request.
+        recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
+        guard let recognitionRequest = recognitionRequest else {
+            AlertManager.showAlert(withTitle: "Error!", withMessage: "Unable to create a SFSpeechAudioBufferRecognitionRequest object", withOkButtonTitle: "OK", on: self)
+            stopRecording()
+            return
+        }
+        recognitionRequest.shouldReportPartialResults = true
+        
+        // Keep speech recognition data on device
+        if #available(iOS 13, *) {
+            recognitionRequest.requiresOnDeviceRecognition = false
+        }
+        
+        // Create a recognition task for the speech recognition session.
+        // Keep a reference to the task so that it can be canceled.
+        recognitionTask = speechRecognizer.recognitionTask(with: recognitionRequest) { result, error in
+            var isFinal = false
+            
+            if let result = result {
+                // Update the text view with the results.
+                self.textView.text = result.bestTranscription.formattedString
+                isFinal = result.isFinal
+                print("Text => \(result.bestTranscription.formattedString)")
+            }
+            
+            if error != nil || isFinal {
+                // Stop recognizing speech if there is a problem.
+                self.audioEngine.stop()
+                inputNode.removeTap(onBus: 0)
+                
+                self.recognitionRequest = nil
+                self.recognitionTask = nil
+                
+                self.recordButton.isEnabled = true
+                self.recordButton.setTitle("Start Recording", for: [])
+            }
+        }
+        
+        // Configure the microphone input.
+        let recordingFormat = inputNode.outputFormat(forBus: 0)
+        inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer: AVAudioPCMBuffer, when: AVAudioTime) in
+            self.recognitionRequest?.append(buffer)
+        }
+        
+        audioEngine.prepare()
+        try audioEngine.start()
+        
+        // Let the user know to start talking.
+        textView.text = "(Go ahead, I'm listening)"
+    }
+    
+    func stopRecording() {
+        audioEngine.stop()
+        recognitionRequest?.endAudio()
+    }
+}
+
 //MARK: - Authorizations
 extension ViewController {
     func requestAuthorization() {
-        speechToTextManager.requestAuthorization { authStatus in
+        SFSpeechRecognizer.requestAuthorization { authStatus in
             OperationQueue.main.addOperation {
                 switch authStatus {
                 case .authorized:
@@ -138,18 +213,14 @@ extension ViewController {
     }
     
     @objc func recordButtonDidTap(_ sender: UIButton) {
-        if speechToTextManager.isAudioEngineRunning {
-//            audioEngine.stop()
-//            recognitionRequest?.endAudio()
-            recordButton.isEnabled = false
-            recordButton.setTitle("Stopping", for: .disabled)
+        if audioEngine.isRunning {
+            stopRecording()
         } else {
             do {
-                try speechToTextManager.startRecording()
+                try startRecording()
                 recordButton.setTitle("Stop recording", for: [])
-            } catch {
-                errorLabel.text = "Recording Not Available"
-                recordButton.isEnabled = false
+            } catch(let recordError) {
+                AlertManager.showAlert(withTitle: "Error!", withMessage: "\(recordError)", withOkButtonTitle: "OK", on: self)
             }
         }
     }
