@@ -1,5 +1,7 @@
 # Speechify-Assessment
-Convert live Speech to Text in app with Swift
+Convert live Speech to Text in app with Swift for the Speechify Assesment provided in 
+https://fresh-hoodie-9f1.notion.site/Real-time-speech-to-text-transcription-95d3859910504ba6ac3670b106038d8e
+
 
 - ## Requirements
   - Xcode Version 13 (13A233)
