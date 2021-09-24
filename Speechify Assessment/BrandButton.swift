@@ -63,7 +63,7 @@ public class BrandButton: UIButton {
         }
     }
     
-    @IBInspectable public var originalBackgroundColor: UIColor? = .primaryColor {
+    @IBInspectable public var originalBackgroundColor: UIColor? = BrandColor.primaryColor.color {
         didSet {
             if isEnabled {
                 self.backgroundColor = originalBackgroundColor

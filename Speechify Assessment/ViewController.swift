@@ -55,6 +55,8 @@ class ViewController: UIViewController {
         textView.layer.borderWidth = 1
         textView.layer.borderColor = UIColor.systemGray.cgColor
         textView.backgroundColor = .clear
+        textView.isEditable = false
+        textView.isScrollEnabled = true
         return textView
     }()
     
