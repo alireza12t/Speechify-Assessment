@@ -59,6 +59,8 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>NSSpeechRecognitionUsageDescription</key>
-	<string>I need to access microhone in order to record and convert your speech to text for yoou.</string>
+	<string>I need to use speech recognition in order to convert your speech to text.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>I need to access microhone in order to record and convert your speech to text.</string>
 </dict>
 </plist>
