@@ -12,14 +12,14 @@ class ViewController: UIViewController {
     
     fileprivate lazy var recordButton: BrandButton = {
         let button = BrandButton()
-        button.originalBackgroundColor = .primaryColor
+        button.originalBackgroundColor = BrandColor.primaryColor.color
         button.setTitle("Record", for: .normal)
         return button
     }()
     
     fileprivate lazy var playButton: BrandButton = {
         let button = BrandButton()
-        button.originalBackgroundColor = .lightPrimaryColor
+        button.originalBackgroundColor = BrandColor.lightPrimaryColor.color
         button.setTitle("Play", for: .normal)
         return button
     }()
@@ -69,7 +69,7 @@ class ViewController: UIViewController {
     
     override func loadView() {
         view = UIView()
-        view.backgroundColor = .backgroundColor
+        view.backgroundColor = BrandColor.backgroundColor.color
         safeArea = view.safeAreaLayoutGuide
         setupFonts()
         addViews()
@@ -143,6 +143,7 @@ extension ViewController {
             if let result = result {
                 // Update the text view with the results.
                 self.textView.text = result.bestTranscription.formattedString
+                textView.textColor = BrandColor.textColor.color
                 isFinal = result.isFinal
                 print("Text => \(result.bestTranscription.formattedString)")
             }
@@ -170,7 +171,8 @@ extension ViewController {
         try audioEngine.start()
         
         // Let the user know to start talking.
-        textView.text = "(Go ahead, I'm listening)"
+        textView.text = "I'm listening"
+        textView.textColor = .systemGray
     }
     
     func stopRecording() {

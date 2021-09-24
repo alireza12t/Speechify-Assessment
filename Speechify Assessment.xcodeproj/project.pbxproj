@@ -15,7 +15,7 @@
 		BB8DE4CA26F926300016F864 /* Speechify_AssessmentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8DE4C926F926300016F864 /* Speechify_AssessmentTests.swift */; };
 		BB8DE4D526F926300016F864 /* Speechify_AssessmentUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8DE4D426F926300016F864 /* Speechify_AssessmentUITests.swift */; };
 		BB8DE4E426F927DE0016F864 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = BB8DE4E326F927DE0016F864 /* RxSwift */; };
-		BB8DE4E626F92A060016F864 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8DE4E526F92A060016F864 /* UIColorExtension.swift */; };
+		BB8DE4E626F92A060016F864 /* BrandColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8DE4E526F92A060016F864 /* BrandColor.swift */; };
 		BB8DE4E926F92CE10016F864 /* BrandButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8DE4E826F92CE10016F864 /* BrandButton.swift */; };
 		BB8DE4EB26F92DB90016F864 /* VibrateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8DE4EA26F92DB90016F864 /* VibrateHelper.swift */; };
 		BBEA2F8F26FDD5100018ADD3 /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBEA2F8E26FDD5100018ADD3 /* AlertManager.swift */; };
@@ -52,7 +52,7 @@
 		BB8DE4D026F926300016F864 /* Speechify AssessmentUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Speechify AssessmentUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB8DE4D426F926300016F864 /* Speechify_AssessmentUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Speechify_AssessmentUITests.swift; sourceTree = "<group>"; };
 		BB8DE4D626F926300016F864 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		BB8DE4E526F92A060016F864 /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
+		BB8DE4E526F92A060016F864 /* BrandColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandColor.swift; sourceTree = "<group>"; };
 		BB8DE4E826F92CE10016F864 /* BrandButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandButton.swift; sourceTree = "<group>"; };
 		BB8DE4EA26F92DB90016F864 /* VibrateHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VibrateHelper.swift; sourceTree = "<group>"; };
 		BBEA2F8E26FDD5100018ADD3 /* AlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
@@ -166,6 +166,7 @@
 		BB8DE4EE26F92DEC0016F864 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				BB8DE4E526F92A060016F864 /* BrandColor.swift */,
 				BBEA2F8E26FDD5100018ADD3 /* AlertManager.swift */,
 				BB8DE4EA26F92DB90016F864 /* VibrateHelper.swift */,
 			);
@@ -175,7 +176,6 @@
 		BB8DE4EF26F92DF50016F864 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				BB8DE4E526F92A060016F864 /* UIColorExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -328,7 +328,7 @@
 				BB8DE4EB26F92DB90016F864 /* VibrateHelper.swift in Sources */,
 				BB8DE4B326F9262A0016F864 /* AppDelegate.swift in Sources */,
 				BB8DE4B526F9262A0016F864 /* SceneDelegate.swift in Sources */,
-				BB8DE4E626F92A060016F864 /* UIColorExtension.swift in Sources */,
+				BB8DE4E626F92A060016F864 /* BrandColor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
