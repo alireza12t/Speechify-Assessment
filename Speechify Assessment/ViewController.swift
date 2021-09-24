@@ -24,6 +24,7 @@ class ViewController: UIViewController {
         button.originalBackgroundColor = BrandColor.lightPrimaryColor.color
         button.setTitle("Play", for: [])
         button.accessibilityLabel = "Play"
+        button.accessibilityHint = "this button can play recorded voice"
         return button
     }()
     
@@ -73,6 +74,7 @@ class ViewController: UIViewController {
     private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
     private var recognitionTask: SFSpeechRecognitionTask?
     private let audioEngine = AVAudioEngine()
+    var audioPlayer: AVAudioPlayer?
     
     override func loadView() {
         view = UIView()
@@ -100,6 +102,11 @@ class ViewController: UIViewController {
         playButton.addTarget(self, action: #selector(playButtonDidTap(_:)), for: .touchUpInside)
         recordButton.addTarget(self, action: #selector(recordButtonDidTap(_:)), for: .touchUpInside)
     }
+    
+    func getDocumentsDirectory() -> URL {
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        return paths[0]
+    }
 }
 
 //MARK: - SpeechRecognizerDelegate
@@ -117,14 +124,14 @@ extension ViewController: SFSpeechRecognizerDelegate {
 
 //MARK: - Speech Convertor & Record
 extension ViewController {
-    private func startRecording() throws {
+    private func startConvertingSpeech() throws {
         // Cancel the previous task if it's running.
         recognitionTask?.cancel()
         self.recognitionTask = nil
         
         // Configure the audio session for the app.
         let audioSession = AVAudioSession.sharedInstance()
-        try audioSession.setCategory(.record, mode: .measurement, options: .duckOthers)
+        try audioSession.setCategory(.playAndRecord, mode: .default, options: .duckOthers)
         try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
         let inputNode = audioEngine.inputNode
         
@@ -132,7 +139,7 @@ extension ViewController {
         recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
         guard let recognitionRequest = recognitionRequest else {
             AlertManager.showAlert(withTitle: "Error!", withMessage: "Unable to create a SFSpeechAudioBufferRecognitionRequest object", withOkButtonTitle: "OK", on: self)
-            stopRecording()
+            stopConvertingSpeech()
             return
         }
         recognitionRequest.shouldReportPartialResults = true
@@ -147,19 +154,6 @@ extension ViewController {
         recognitionTask = speechRecognizer.recognitionTask(with: recognitionRequest) { result, error in
             var isFinal = false
             
-            //            if AVAudioSession.sharedInstance().isOtherAudioPlaying {
-            //                AlertManager.showAlert(withTitle: "Recoording interupted!", withMessage: "Your phone is playing sth!!", withOkButtonTitle: "OK", on: self)
-            //                // Stop recognizing speech if there is a problem.
-            //                self.audioEngine.stop()
-            //                inputNode.removeTap(onBus: 0)
-            //
-            //                self.recognitionRequest = nil
-            //                self.recognitionTask = nil
-            //
-            //                self.recordButton.setTitle("Start Recording", for: [])
-            //            }
-            
-            
             if let result = result {
                 // Update the text view with the results.
                 let newTranscriptionText = result.bestTranscription.formattedString
@@ -169,14 +163,16 @@ extension ViewController {
                 }
                 
                 let newWordsList = newTranscriptionText.split(separator: " ").compactMap({String($0)})
-                if let difference = newWordsList.last, newTranscriptionText != oldTranscriptionText {
-                    self.textView.attributedText = oldTranscriptionText.generateAttributedString(highlightedText: difference)
+                let lastOldWord = oldTranscriptionText.split(separator: " ").compactMap({String($0)}).last ?? ""
+                
+                if let difference = newWordsList.last, !difference.contains(lastOldWord), newTranscriptionText != oldTranscriptionText {
+                    self.textView.attributedText = newWordsList.dropLast().joined(separator: " ").generateAttributedString(highlightedText: difference)
                 } else {
-                    self.textView.text = ""
-                    self.textView.text = newTranscriptionText
+                    self.textView.attributedText = newTranscriptionText.generateAttributedString(highlightedText: "")
                 }
+                self.textView.textColor = BrandColor.textColor.color
                 isFinal = result.isFinal
-                print("New Text => ")
+                print("New Text => \(newTranscriptionText)")
             }
             
             if error != nil || isFinal {
@@ -201,10 +197,12 @@ extension ViewController {
         try audioEngine.start()
         
         // Let the user know to start talking.
+        textView.text = ""
         textView.text = "I'm listening"
+        textView.textColor = .systemGray
     }
     
-    func stopRecording() {
+    func stopConvertingSpeech() {
         audioEngine.stop()
         recognitionRequest?.endAudio()
     }
@@ -240,15 +238,28 @@ extension ViewController {
 //MARK: - Actions
 extension ViewController {
     @objc func playButtonDidTap(_ sender: UIButton) {
-        
+//        if audioPlayer != nil {
+//            if audioPlayer!.isPlaying {
+//                audioPlayer?.pause()
+//            } else {
+//                audioPlayer?.play()
+//            }
+//        } else {
+//            do {
+//                let audioPlayer = try AVAudioPlayer(contentsOf: audioRecorder.url)
+//                audioPlayer.play()
+//            } catch let error {
+//                AlertManager.showAlert(withTitle: "Error in playing!", withMessage: "Can't play the audio file failed with an error \(error.localizedDescription)", withOkButtonTitle: "OK", on: self)
+//            }
+//        }
     }
     
     @objc func recordButtonDidTap(_ sender: UIButton) {
         if audioEngine.isRunning {
-            stopRecording()
+            stopConvertingSpeech()
         } else {
             do {
-                try startRecording()
+                try startConvertingSpeech()
                 recordButton.setTitle("Stop recording", for: [])
             } catch(let recordError) {
                 AlertManager.showAlert(withTitle: "Error!", withMessage: "\(recordError)", withOkButtonTitle: "OK", on: self)
@@ -308,7 +319,3 @@ extension ViewController {
         recordButton.titleLabel?.font = .systemFont(ofSize: 15, weight: .medium)
     }
 }
-
-//extension ViewController: AVAudioPlayerDelegate {
-//    audioppla
-//}

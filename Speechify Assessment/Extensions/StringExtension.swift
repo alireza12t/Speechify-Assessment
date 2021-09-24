@@ -21,7 +21,7 @@ extension String {
         }
         let attributedString = NSMutableAttributedString(string: fullText)
                 
-        attributedString.addAttribute(NSAttributedString.Key.font, value: UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.bold), range: range)
+//        attributedString.addAttribute(NSAttributedString.Key.font, value: UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.bold), range: range)
         attributedString.addAttribute(NSAttributedString.Key.backgroundColor, value: highlightColor, range: range)
         
         return attributedString
