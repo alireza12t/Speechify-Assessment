@@ -8,7 +8,7 @@
 import UIKit
 
 public class BrandButton: UIButton {
-    
+        
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         setupUI()
@@ -21,6 +21,7 @@ public class BrandButton: UIButton {
     
     public func setupUI() {
         layer.cornerRadius = self.cornerRadius
+        originalBackgroundColor = backgroundColor
         translatesAutoresizingMaskIntoConstraints = false
         titleLabel?.font = .systemFont(ofSize: 15, weight: .medium)
         setTitleColor(.white, for: .normal)
@@ -59,6 +60,26 @@ public class BrandButton: UIButton {
     @IBInspectable public var cornerRadius: CGFloat = 30 {
         didSet {
             self.layer.cornerRadius = cornerRadius
+        }
+    }
+    
+    @IBInspectable public var originalBackgroundColor: UIColor? = .primaryColor {
+        didSet {
+            if isEnabled {
+                self.backgroundColor = originalBackgroundColor
+            }
+        }
+    }
+}
+
+extension BrandButton {
+    public override var isEnabled: Bool {
+        didSet {
+            if isEnabled {
+                self.backgroundColor = originalBackgroundColor
+            } else {
+                self.backgroundColor = .systemGray
+            }
         }
     }
 }
