@@ -26,87 +26,61 @@ class ViewModel: NSObject {
     var documentsDirectory: URL {
         return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
     }
-
+    
     override init() {
         super.init()
         speechRecognizer.delegate = self
     }
     
-    private func startConvertingSpeech() throws {
-        // Cancel the previous task if it's running.
-        recognitionTask?.cancel()
-        self.recognitionTask = nil
-        
-        // Configure the audio session for the app.
-        try audioSession.setCategory(.playAndRecord, mode: .default, options: .duckOthers)
-        try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
-        let inputNode = audioEngine.inputNode
-        
-        // Create and configure the speech recognition request.
-        recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
-        guard let recognitionRequest = recognitionRequest else {
-            AlertManager.showAlert(withTitle: "Error!", withMessage: "Unable to create a SFSpeechAudioBufferRecognitionRequest object")
-            stopConvertingSpeech()
-            return
-        }
-        recognitionRequest.shouldReportPartialResults = true
-        
-        // Keep speech recognition data on device
-        if #available(iOS 13, *) {
-            recognitionRequest.requiresOnDeviceRecognition = false
-        }
-        
-        // Create a recognition task for the speech recognition session.
-        // Keep a reference to the task so that it can be canceled.
+    /// Create a recognition task for the speech recognition session.
+    fileprivate func createRecognitionTask(_ recognitionRequest: SFSpeechAudioBufferRecognitionRequest, _ inputNode: AVAudioInputNode) {
+        // We Keep a reference to the task so that it can be canceled.
         recognitionTask = speechRecognizer.recognitionTask(with: recognitionRequest) { result, error in
             var isFinal = false
             
             if let result = result {
-                // Update the text view with the results.
-                let newTranscriptionText = result.bestTranscription.formattedString
-                var oldTranscriptionText = self.textView?.text ?? ""
-                if oldTranscriptionText == "I'm listening" {
-                    oldTranscriptionText = ""
-                }
-                
-                let newWordsList = newTranscriptionText.split(separator: " ").compactMap({String($0)})
-                let lastOldWord = oldTranscriptionText.split(separator: " ").compactMap({String($0)}).last ?? ""
-                
-                if let difference = newWordsList.last, !difference.contains(lastOldWord), newTranscriptionText != oldTranscriptionText {
-                    self.textView?.attributedText = newWordsList.dropLast().joined(separator: " ").generateAttributedString(highlightedText: difference)
-                } else {
-                    self.textView?.attributedText = newTranscriptionText.generateAttributedString(highlightedText: "")
-                }
-                self.textView?.textColor = BrandColor.textColor.color
-                isFinal = result.isFinal
-                print("New Text => \(newTranscriptionText)")
+                self.showSpeechConvertResult(result, &isFinal)
             }
             
             if error != nil || isFinal {
-                // Stop recognizing speech if there is a problem.
-                self.audioEngine.stop()
-                inputNode.removeTap(onBus: 0)
-                
-                self.recognitionRequest = nil
-                self.recognitionTask = nil
-                
-                self.recordButton?.setTitle("Start Recording", for: [])
+                self.stopConvertingSpeech(inputNode: inputNode)
             }
         }
-        
-        // Configure the microphone input.
-        let recordingFormat = inputNode.outputFormat(forBus: 0)
-        inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer: AVAudioPCMBuffer, when: AVAudioTime) in
-            self.recognitionRequest?.append(buffer)
+    }
+    
+    private func startConvertingSpeech() {
+        do {
+            cancelPreviousTask()
+            
+            // Configure the audio session for the app.
+            try audioSession.setCategory(.playAndRecord, mode: .default, options: .duckOthers)
+            try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
+            let inputNode = audioEngine.inputNode
+            
+            // Create and configure the speech recognition request.
+            recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
+            guard let recognitionRequest = recognitionRequest else {
+                AlertManager.showAlert(withTitle: "Error!", withMessage: "Unable to create a SFSpeechAudioBufferRecognitionRequest object")
+                stopConvertingSpeech()
+                return
+            }
+            recognitionRequest.shouldReportPartialResults = true
+            
+            // Keep speech recognition data on device
+            if #available(iOS 13, *) {
+                recognitionRequest.requiresOnDeviceRecognition = false
+            }
+            
+            createRecognitionTask(recognitionRequest, inputNode)
+            configureMicrophone(inputNode)
+            
+            audioEngine.prepare()
+            try audioEngine.start()
+            
+            notifyUserCanStartTalking()
+        } catch(let recordError) {
+            AlertManager.showAlert(withTitle: "Error!", withMessage: "\(recordError)")
         }
-        
-        audioEngine.prepare()
-        try audioEngine.start()
-        
-        // Let the user know to start talking.
-        textView?.text = ""
-        textView?.text = "I'm listening"
-        textView?.textColor = .systemGray
     }
     
     private func stopConvertingSpeech() {
@@ -118,12 +92,61 @@ class ViewModel: NSObject {
         if audioEngine.isRunning {
             stopConvertingSpeech()
         } else {
-            do {
-                try startConvertingSpeech()
-                recordButton?.setTitle("Stop recording", for: [])
-            } catch(let recordError) {
-                AlertManager.showAlert(withTitle: "Error!", withMessage: "\(recordError)")
-            }
+            startConvertingSpeech()
+        }
+    }
+    
+    /// Let the user know to start talking.
+    private func notifyUserCanStartTalking() {
+        textView?.text = ""
+        textView?.text = "I'm listening"
+        textView?.textColor = .systemGray
+        recordButton?.setTitle("Stop recording", for: [])
+    }
+    
+    /// Stop recognizing speech if there is a problem.
+    private func stopConvertingSpeech(inputNode: AVAudioInputNode) {
+        self.audioEngine.stop()
+        inputNode.removeTap(onBus: 0)
+        
+        self.recognitionRequest = nil
+        self.recognitionTask = nil
+        
+        self.recordButton?.setTitle("Start Recording", for: [])
+    }
+    
+    /// Cancel the previous task if it's running.
+    private func cancelPreviousTask() {
+        recognitionTask?.cancel()
+        recognitionTask = nil
+    }
+    
+    /// Update the text view with the results.
+    private func showSpeechConvertResult(_ result: SFSpeechRecognitionResult, _ isFinal: inout Bool) {
+        let newTranscriptionText = result.bestTranscription.formattedString
+        var oldTranscriptionText = self.textView?.text ?? ""
+        if oldTranscriptionText == "I'm listening" {
+            oldTranscriptionText = ""
+        }
+        
+        let newWordsList = newTranscriptionText.split(separator: " ").compactMap({String($0)})
+        let lastOldWord = oldTranscriptionText.split(separator: " ").compactMap({String($0)}).last ?? ""
+        
+        if let difference = newWordsList.last, !difference.contains(lastOldWord), newTranscriptionText != oldTranscriptionText {
+            self.textView?.attributedText = newWordsList.dropLast().joined(separator: " ").generateAttributedString(highlightedText: difference)
+        } else {
+            self.textView?.attributedText = newTranscriptionText.generateAttributedString(highlightedText: "")
+        }
+        self.textView?.textColor = BrandColor.textColor.color
+        isFinal = result.isFinal
+        print("New Text => \(newTranscriptionText)")
+    }
+    
+    /// Configure the microphone input.
+    private func configureMicrophone(_ inputNode: AVAudioInputNode) {
+        let recordingFormat = inputNode.outputFormat(forBus: 0)
+        inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer: AVAudioPCMBuffer, when: AVAudioTime) in
+            self.recognitionRequest?.append(buffer)
         }
     }
     
@@ -152,27 +175,27 @@ class ViewModel: NSObject {
     }
     
     func playSound() {
-    //        if audioPlayer != nil {
-    //            if audioPlayer!.isPlaying {
-    //                audioPlayer?.pause()
-    //            } else {
-    //                audioPlayer?.play()
-    //            }
-    //        } else {
-    //            do {
-    //                let audioPlayer = try AVAudioPlayer(contentsOf: audioRecorder.url)
-    //                audioPlayer.play()
-    //            } catch let error {
-    //                AlertManager.showAlert(withTitle: "Error in playing!", withMessage: "Can't play the audio file failed with an error \(error.localizedDescription)")
-    //            }
-    //        }
-            //MARK: I need to fix recoriding sound and play it here but it has a bug and I couldn't find the problem and submmited my question in stackoverflow => https://stackoverflow.com/questions/69318638/record-voice-while-converting-speech-to-text-using-sfspeechrecognitiontask
-            if let text = textView?.text, !text.isEmpty {
-                SpeakManager.shared.say(text)
-            } else {
-                AlertManager.showAlert(withTitle: "Error in playing!", withMessage: "You didn't say anything!", withOkButtonTitle: "OK")
-            }
+        //        if audioPlayer != nil {
+        //            if audioPlayer!.isPlaying {
+        //                audioPlayer?.pause()
+        //            } else {
+        //                audioPlayer?.play()
+        //            }
+        //        } else {
+        //            do {
+        //                let audioPlayer = try AVAudioPlayer(contentsOf: audioRecorder.url)
+        //                audioPlayer.play()
+        //            } catch let error {
+        //                AlertManager.showAlert(withTitle: "Error in playing!", withMessage: "Can't play the audio file failed with an error \(error.localizedDescription)")
+        //            }
+        //        }
+        //MARK: I need to fix recording sound and play it here but it has a bug and I couldn't find the problem and submmited my question in stackoverflow => https://stackoverflow.com/questions/69318638/record-voice-while-converting-speech-to-text-using-sfspeechrecognitiontask
+        if let text = textView?.text, !text.isEmpty {
+            SpeakManager.shared.say(text)
+        } else {
+            AlertManager.showAlert(withTitle: "Error in playing!", withMessage: "You didn't say anything!", withOkButtonTitle: "OK")
         }
+    }
 }
 
 extension ViewModel: SFSpeechRecognizerDelegate {
